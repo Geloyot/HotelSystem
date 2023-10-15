@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBSYSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="roleId" />
+    </Key>
+    <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+    <Property Name="roleDescription" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="UserAccount">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userPassword" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userStatus" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="roleId" Type="int" />
+    <Property Name="createdById" Type="int" />
+  </EntityType>
+  <EntityType Name="UserInformation">
+    <Key>
+      <PropertyRef Name="userInfoId" />
+    </Key>
+    <Property Name="userInfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userInfoLastName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userInfoFirstName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userInfoAddress" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="userInfoEmailAddress" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="userId" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'DBSYS.dbo.vw_all_user_role' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_all_user_role">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="Username" />
+      <PropertyRef Name="Password" />
+    </Key>
+    <Property Name="UserId" Type="int" Nullable="false" />
+    <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Role" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK__UserInfor__userI__1BFD2C07">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="UserInformation" Type="Self.UserInformation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="UserInformation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserAccount_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="roleId" />
+      </Principal>
+      <Dependent Role="UserAccount">
+        <PropertyRef Name="roleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="SP_NewUserAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UName" Type="varchar" Mode="In" />
+    <Parameter Name="UPassword" Type="varchar" Mode="In" />
+    <Parameter Name="RoleID" Type="int" Mode="In" />
+    <Parameter Name="CreatedByID" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="DBSYSModelStoreContainer">
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInformation" EntityType="Self.UserInformation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vw_all_user_role" EntityType="Self.vw_all_user_role" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vw_all_user_role].[UserId] AS [UserId], 
+    [vw_all_user_role].[Username] AS [Username], 
+    [vw_all_user_role].[Password] AS [Password], 
+    [vw_all_user_role].[Role] AS [Role]
+    FROM [dbo].[vw_all_user_role] AS [vw_all_user_role]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__UserInfor__userI__1BFD2C07" Association="Self.FK__UserInfor__userI__1BFD2C07">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="UserInformation" EntitySet="UserInformation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserAccount_Role" Association="Self.FK_UserAccount_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="UserAccount" EntitySet="UserAccount" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

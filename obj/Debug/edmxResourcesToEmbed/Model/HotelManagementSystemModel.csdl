@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DBSYSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DBSYSEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="UserAccount" EntityType="DBSYSModel.UserAccount" />
+    <EntitySet Name="UserInformation" EntityType="DBSYSModel.UserInformation" />
+    <AssociationSet Name="FK__UserInfor__userI__4D94879B" Association="DBSYSModel.FK__UserInfor__userI__4D94879B">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="UserInformation" EntitySet="UserInformation" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UserAccount">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="userPassword" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="userStatus" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="UserInformation" Relationship="DBSYSModel.FK__UserInfor__userI__4D94879B" FromRole="UserAccount" ToRole="UserInformation" />
+  </EntityType>
+  <EntityType Name="UserInformation">
+    <Key>
+      <PropertyRef Name="userInfo_Id" />
+    </Key>
+    <Property Name="userInfo_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userInfo_LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="userInfo_FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="userInfo_Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="userInfo_EmailAddress" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="userId" Type="Int32" />
+    <NavigationProperty Name="UserAccount" Relationship="DBSYSModel.FK__UserInfor__userI__4D94879B" FromRole="UserInformation" ToRole="UserAccount" />
+  </EntityType>
+  <Association Name="FK__UserInfor__userI__4D94879B">
+    <End Type="DBSYSModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="DBSYSModel.UserInformation" Role="UserInformation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="UserInformation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
